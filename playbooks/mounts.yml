@@ -1,0 +1,6 @@
+---
+- hosts: "{{ target | default('cluster') }}"
+  gather_facts: False
+  tasks:
+  - include_tasks: tasks/mounts_task.yml
+

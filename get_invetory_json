@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+[[ -z "${ANSIBLE_HOME}" ]] && { echo "ANSIBLE_HOME not defined!!"; exit 1; }
+
+pushd ${ANSIBLE_HOME} &> /dev/null
+
+ansible-inventory --list > ${ANSIBLE_HOME}/inventory.json
+
+popd &> /dev/null
+

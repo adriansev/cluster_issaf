@@ -1,0 +1,73 @@
+---
+- name: Sync auto.master
+  ansible.builtin.copy:
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+    backup: false
+    dest: /etc/
+    src: /etc/auto.master
+  tags: mounts
+
+- name: Restart autofs
+  ansible.builtin.systemd:
+    name: autofs.service
+    state: restarted
+    daemon_reload: true
+    enabled: true
+  tags: mounts
+
+- name: Sync mount services
+  ansible.builtin.copy:
+    mode: 0644
+    owner: root
+    group: root
+    backup: false
+    force: true
+    dest: /etc/systemd/system/
+    src: "{{ mounts_sysd }}"
+  loop_control:
+    loop_var: mounts_sysd
+  loop: "{{ mounts_list }}"
+  vars:
+    mounts_list:
+      - "{{ playbook_dir }}/../additions/mounts/alice.mount"
+      - "{{ playbook_dir }}/../additions/mounts/alicefast.mount"
+      - "{{ playbook_dir }}/../additions/mounts/home.mount"
+      - "{{ playbook_dir }}/../additions/mounts/share-apps.mount"
+      - "{{ playbook_dir }}/../additions/mounts/fastdata.mount"
+      - "{{ playbook_dir }}/../additions/mounts/software.mount"
+      - "{{ playbook_dir }}/../additions/mounts/data.mount"
+      - "{{ playbook_dir }}/../additions/mounts/data2.mount"
+      - "{{ playbook_dir }}/../additions/mounts/data3.mount"
+      - "{{ playbook_dir }}/../additions/mounts/data4.mount"
+  tags: mounts
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  tags: mounts
+
+- name: Enable and start mount points
+  ansible.builtin.systemd:
+    enabled: true
+    state: started
+    name: "{{ mount_units }}"
+  loop_control:
+    loop_var: mount_units
+  loop: "{{ mount_units_list }}"
+  vars:
+    mount_units_list:
+      - "home.mount"
+      - "share-apps.mount"
+      - "fastdata.mount"
+      - "alicefast.mount"
+      - "data.mount"
+      - "alice.mount"
+      - "data2.mount"
+      - "data3.mount"
+      - "data4.mount"
+      - "software.mount"
+  tags: mounts
+

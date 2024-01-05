@@ -1,0 +1,14 @@
+*.log
+**/*.log
+vault/*
+roles/**
+facts/**
+backup/**
+collections/**
+.ansible_galaxy
+host_logs
+galaxy_cache
+ansible_collections
+inventory.json
+additions_work/**
+galaxy_token

@@ -1,0 +1,31 @@
+---
+- hosts: "{{ target | default('all') }}"
+
+  tasks:
+  - include_tasks: tasks/00basic_tools.yml
+  - include_tasks: tasks/00basic_tools_hw.yml
+
+  post_tasks:
+  - name: Get facts
+    ansible.builtin.setup:
+      gather_timeout: 30
+      gather_subset:
+        - 'all'
+        - '!facter'
+        - '!ohai'
+
+  - name: Gather extended facts
+    deltabg.extended_facts.extended_facts:
+      gather_timeout: 50
+      gather_subset:
+        - 'all'
+        - '!MysqlFactCollector'
+        - '!Icinga2FactCollector'
+        - '!DockerFactCollector'
+  #  register: extd_facts
+
+  # Print extended facts
+  #- name: Debug
+  #  debug:
+  #    var: extd_facts.stdout
+
