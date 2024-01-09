@@ -15,3 +15,6 @@ issaf-0-3
 issaf-0-4
 issaf-0-5
 
+[cluster:vars]
+rocks_node="1"
+

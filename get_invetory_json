@@ -4,7 +4,7 @@
 
 pushd ${ANSIBLE_HOME} &> /dev/null
 
-ansible-inventory --list > ${ANSIBLE_HOME}/inventory.json
+ansible-inventory --list --export > ${ANSIBLE_HOME}/inventory.json
 
 popd &> /dev/null
 

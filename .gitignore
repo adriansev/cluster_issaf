@@ -12,3 +12,4 @@ ansible_collections
 inventory.json
 additions_work/**
 galaxy_token
+additions/users/user_group_info.yml

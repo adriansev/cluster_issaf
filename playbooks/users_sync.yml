@@ -1,0 +1,7 @@
+---
+- hosts: "{{ target | default('cluster') }}"
+  gather_facts: False
+  vars_files:
+      - "{{ playbook_dir }}/../additions/users/user_group_info.yml"
+  tasks:
+  - include_tasks: tasks/users_task.yml
