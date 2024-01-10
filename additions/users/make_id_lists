@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 
+import os
 import pwd
 import spwd
 import grp
-import rich
+# import rich
+
+my_path = os.path.dirname(os.path.realpath(__file__))
 
 group_info = [{'gr_name': g.gr_name, 'gr_passwd': g.gr_passwd, 'gr_gid': g.gr_gid, 'gr_mem': g.gr_mem } for g in grp.getgrall() if g.gr_gid > 999]
 group_info_sorted = sorted(group_info, key = lambda t: int(t['gr_gid']))
+
+def get_user_additional_groups(user):
+    additional_groups = []
+    for g in group_info_sorted:
+        if g['gr_name'] == user: continue
+        if user in g['gr_mem']: additional_groups.append(g['gr_name'])
+    return additional_groups
 
 shadow_info_list = spwd.getspall()
 def get_user_sinfo(user):
@@ -28,16 +38,15 @@ for user_info in pwd.getpwall():
     user_info_list.append(user_dict)
 user_list_sorted = sorted(user_info_list, key = lambda t: int(t['pw_uid']))
 
-
-with open('user_group_info.yml', 'w') as yml:
+with open(f'{my_path}/user_group_info.yml', 'w') as yml:
     yml.write('---\n')
     yml.write('group_details:\n')
     for g in group_info_sorted:
-        yml.write(f'  - {{ name: {g["gr_name"]}, gid: {g["gr_gid"]} }}\n')
+        yml.write(f'  - {{ name: \'{g["gr_name"]}\', gid: {g["gr_gid"]} }}\n')
     yml.write('\n')
     yml.write('user_details:\n')
     for u in user_list_sorted:
-        yml.write(f'  - {{ name: {u["pw_name"]}, uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: {u["pw_shell"]}, home: {u["pw_dir"]}, hash: {u["sp_pwdp"]} }}\n')
+        add_groups = get_user_additional_groups(u["pw_name"])
+        yml.write(f'  - {{ name: \'{u["pw_name"]}\', uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: \'{u["pw_shell"]}\', home: \'{u["pw_dir"]}\', groups: { add_groups }, hash: \'{u["sp_pwdp"]}\' }}\n')
 
 #rich.print(user_list_sorted)
-

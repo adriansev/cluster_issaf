@@ -3,5 +3,11 @@
   gather_facts: False
   vars_files:
       - "{{ playbook_dir }}/../additions/users/user_group_info.yml"
+
+  pre_tasks:
+  - name: Create user yml list
+    local_action: command cmd="{{ playbook_dir }}/../additions/users/make_id_lists"
+  run_once: True
+
   tasks:
   - include_tasks: tasks/users_task.yml

@@ -7,6 +7,7 @@
   loop_control:
     loop_var: group_def
   loop: "{{ group_details }}"
+  register: group_creation
 
 - name: Add users on compute nodes
   ansible.builtin.user:
@@ -22,3 +23,4 @@
   loop_control:
     loop_var: user_def
   loop: "{{ user_details }}"
+  when: group_creation is defined
