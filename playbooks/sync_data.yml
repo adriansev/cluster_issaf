@@ -1,0 +1,11 @@
+---
+- hosts: "{{ target | default('cluster') }}"
+  gather_facts: False
+  vars:
+    ansible_shell_executable: /bin/bash
+  vars_files:
+      - "{{ playbook_dir }}/../additions/data_sync/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/data_list_exclusive.yml"
+
+  tasks:
+  - include_tasks: tasks/sync_data_task.yml
