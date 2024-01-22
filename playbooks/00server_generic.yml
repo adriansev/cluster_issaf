@@ -11,13 +11,4 @@
       - "tasks/00basic_tools.yml"
       - "tasks/00basic_tools_hw.yml"
       - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/cfg_smartd_task.yml"
-      - "tasks/cfg_lmsensors.yml"
-      - "tasks/pkg_gmond_task.yml"
-
-- name: Do chrony setup
-  ansible.builtin.import_playbook: cfg_chrony.yml
-
-- name: Do lldp setup
-  ansible.builtin.import_playbook: cfg_lldpd.yml
 

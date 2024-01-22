@@ -10,5 +10,7 @@
     with_items:
       - "tasks/00basic_tools.yml"
       - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/pkg_gmond_task.yml"
+
+
+##      - "tasks/pkg_gmond_task.yml"
 
